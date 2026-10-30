@@ -49,6 +49,15 @@ const contactOverlay = document.getElementById("contactOverlay");
 const btnContact = document.getElementById("btnContact");
 const btnCloseContact = document.getElementById("btnCloseContact");
 
+// Confirmation Popup Elements
+const confirmationOverlay = document.getElementById("confirmationOverlay");
+const btnCloseConfirmation = document.getElementById("btnCloseConfirmation");
+const btnPopupDone = document.getElementById("btnPopupDone");
+const popupConfRef = document.getElementById("popupConfRef");
+const popupConfDoctor = document.getElementById("popupConfDoctor");
+const popupConfTime = document.getElementById("popupConfTime");
+const popupConfPatient = document.getElementById("popupConfPatient");
+
 // Helpers
 function showAlert(message, type = "error") {
   alertBox.className = `alert-box ${type}`;
@@ -306,6 +315,15 @@ btnNext.addEventListener("click", async () => {
       confDoctor.textContent = appState.selectedDoctor;
       confPatient.textContent = `${booking.name} (${booking.email})`;
 
+      // Populate & display Confirmation Popup Modal
+      if (popupConfRef) popupConfRef.textContent = booking.id;
+      if (popupConfDoctor) popupConfDoctor.textContent = appState.selectedDoctor;
+      if (popupConfTime && appState.selectedSlot) {
+        popupConfTime.textContent = formatTime(appState.selectedSlot.start).full;
+      }
+      if (popupConfPatient) popupConfPatient.textContent = `${booking.name} (${booking.email})`;
+      if (confirmationOverlay) confirmationOverlay.classList.remove("hidden");
+
       loadSlotsData();
       goToStep(4);
     } catch (err) {
@@ -441,6 +459,25 @@ btnCloseContact.addEventListener("click", () => {
 contactOverlay.addEventListener("click", (e) => {
   if (e.target === contactOverlay) contactOverlay.classList.add("hidden");
 });
+
+// Confirmation Popup Modal Handlers
+if (btnCloseConfirmation) {
+  btnCloseConfirmation.addEventListener("click", () => {
+    confirmationOverlay.classList.add("hidden");
+  });
+}
+
+if (btnPopupDone) {
+  btnPopupDone.addEventListener("click", () => {
+    confirmationOverlay.classList.add("hidden");
+  });
+}
+
+if (confirmationOverlay) {
+  confirmationOverlay.addEventListener("click", (e) => {
+    if (e.target === confirmationOverlay) confirmationOverlay.classList.add("hidden");
+  });
+}
 
 // Start App
 window.addEventListener("DOMContentLoaded", initApp);
