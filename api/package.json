@@ -1,11 +1,12 @@
 {
-  "name": "varma-clinic-api",
+  "name": "Koya-clinic-api",
   "version": "1.0.0",
-  "description": "Varma Clinic Booking API for Koya Assessment",
+  "description": "Koya Clinic Booking API for Koya Assessment",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "seed": "node seed.js",
     "test": "node --test test/**/*.test.js"
   },
   "engines": {

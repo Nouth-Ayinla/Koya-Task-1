@@ -1,11 +1,7 @@
-// Varma Clinic — Interactive Client Application
-
-const configBase = window.CLINIC_CONFIG?.API_BASE_URL || "";
+// Koya Clinic — Interactive Client Application
 
 let appState = {
   currentStep: 1,
-  apiBase: configBase.replace(/\/$/, ""),
-  apiKey: "",
   slots: [],
   selectedDoctor: "",
   selectedSlot: null,
@@ -93,12 +89,16 @@ function formatTime(isoString) {
   }
 }
 
-// API Call Wrapper
+// Direct API Communication using environment configuration
 async function apiCall(endpoint, options = {}) {
-  const url = `${appState.apiBase}${endpoint}`;
+  const config = window.CLINIC_CONFIG || {};
+  const baseUrl = (config.API_BASE_URL || "").replace(/\/$/, "");
+  const apiKey = config.API_KEY || "";
+
+  const url = `${baseUrl}${endpoint}`;
   const headers = {
     "Content-Type": "application/json",
-    "X-API-Key": appState.apiKey,
+    "X-API-Key": apiKey,
     ...(options.headers || {}),
   };
 
@@ -116,18 +116,6 @@ async function apiCall(endpoint, options = {}) {
 
 // Initialize Application
 async function initApp() {
-  try {
-    const res = await fetch(`${appState.apiBase}/api/public-key`);
-    if (res.ok) {
-      const json = await res.json();
-      if (json.apiKey) {
-        appState.apiKey = json.apiKey;
-      }
-    }
-  } catch (e) {
-    console.warn("Could not retrieve key from API host:", e);
-  }
-
   await loadSlotsData();
 }
 
@@ -241,11 +229,10 @@ function renderDoctorSlots() {
         <div class="slot-item-date">${startFmt.date}</div>
       </div>
       <div>
-        ${
-          canBook
-            ? `<span class="slot-badge-avail">Available</span>`
-            : `<span class="slot-badge-booked">${isPast ? "Expired" : "Booked"}</span>`
-        }
+        ${canBook
+        ? `<span class="slot-badge-avail">Available</span>`
+        : `<span class="slot-badge-booked">${isPast ? "Expired" : "Booked"}</span>`
+      }
       </div>
     `;
 
@@ -412,11 +399,10 @@ btnRunLookup.addEventListener("click", async () => {
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
           <span style="font-size: 12px; color: #64748b;">Patient: <strong>${b.name}</strong></span>
-          ${
-            isConfirmed
-              ? `<button class="btn-pill-cancel-sm cancel-booking-btn" data-id="${b.id}">Cancel</button>`
-              : `<span style="font-size: 11px; color: #94a3b8;">Slot Released</span>`
-          }
+          ${isConfirmed
+          ? `<button class="btn-pill-cancel-sm cancel-booking-btn" data-id="${b.id}">Cancel</button>`
+          : `<span style="font-size: 11px; color: #94a3b8;">Slot Released</span>`
+        }
         </div>
       `;
       drawerBookingsList.appendChild(card);
