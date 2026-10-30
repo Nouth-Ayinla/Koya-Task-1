@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Varma Clinic — Book Appointment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Dark Teal Bar matching Reference Design -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <button id="btnMenu" class="nav-pill-btn">
+        <span>Menu</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="brand-logo">
+        <svg class="brand-icon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L14.4 7.2L20 8.8L15.6 13.2L17 19L12 16L7 19L8.4 13.2L4 8.8L9.6 7.2L12 2Z" fill="white" opacity="0.9"/>
+          <circle cx="12" cy="12" r="3" fill="#153942"/>
+        </svg>
+        <span class="brand-text">varma</span>
+      </div>
+
+      <div class="nav-actions">
+        <button id="btnContact" class="nav-pill-btn">Contact</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Booking App Container -->
+  <main class="page-wrapper">
+    <div class="booking-card">
+      <!-- Left Column: Form & Stepper -->
+      <div class="form-column">
+        <!-- Orange Corner Accent -->
+        <div class="corner-accent"></div>
+
+        <div class="form-inner">
+          <h1 class="main-heading">Book Appointment</h1>
+
+          <!-- Multi-Step Progress Tracker -->
+          <div class="stepper-wrapper">
+            <div class="stepper">
+              <div class="step-item active" data-step="1">
+                <span class="step-title">Service</span>
+                <div class="step-indicator"></div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-item" data-step="2">
+                <span class="step-title">Time</span>
+                <div class="step-indicator"></div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-item" data-step="3">
+                <span class="step-title">Details</span>
+                <div class="step-indicator"></div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-item" data-step="4">
+                <span class="step-title">Done</span>
+                <div class="step-indicator"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alert notification banner -->
+          <div id="alertBox" class="alert-box hidden"></div>
+
+          <!-- Step 1: Select Service & Doctor -->
+          <section id="step1" class="step-pane active">
+            <h2 class="section-title">Please select service:</h2>
+
+            <div class="field-group">
+              <label class="field-label" for="selectTreatment">Treatment</label>
+              <div class="select-wrapper">
+                <select id="selectTreatment" class="custom-select">
+                  <option value="General Consultation">General Consultation & Checkup</option>
+                  <option value="Dental Examination">Dental Examination & Cleaning</option>
+                  <option value="Specialist Review">Specialist Medical Review</option>
+                  <option value="Routine Follow-up">Routine Follow-up Care</option>
+                </select>
+                <div class="select-chevron">▾</div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="selectDoctor">Doctor</label>
+              <div class="select-wrapper">
+                <select id="selectDoctor" class="custom-select">
+                  <option value="">Loading doctors from API...</option>
+                </select>
+                <div class="select-chevron">▾</div>
+              </div>
+            </div>
+
+            <p class="privacy-notice">
+              By submitting this form you are agreeing to our <a href="#">Privacy Policy</a>
+            </p>
+          </section>
+
+          <!-- Step 2: Choose Slot -->
+          <section id="step2" class="step-pane hidden">
+            <h2 class="section-title">Select appointment time:</h2>
+            <p class="section-desc">Available slots for <strong id="selectedDoctorName">-</strong></p>
+
+            <div id="step2Alert" class="alert-box error hidden"></div>
+
+            <div id="slotsList" class="slots-list-grid">
+              <!-- Dynamically rendered slots -->
+            </div>
+          </section>
+
+          <!-- Step 3: Patient Details -->
+          <section id="step3" class="step-pane hidden">
+            <h2 class="section-title">Patient details:</h2>
+
+            <div class="summary-pill-box">
+              <div class="summary-pill-row">
+                <span class="label">Doctor:</span>
+                <span id="reviewDoctor" class="val">-</span>
+              </div>
+              <div class="summary-pill-row">
+                <span class="label">Date & Time:</span>
+                <span id="reviewTime" class="val">-</span>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="inputName">Full Name</label>
+              <input type="text" id="inputName" class="custom-input" placeholder="e.g. Ada Obi" required />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="inputEmail">Email Address</label>
+              <input type="email" id="inputEmail" class="custom-input" placeholder="e.g. ada@example.com" required />
+              <span class="field-hint">Confirmation and lookups are tied to this email</span>
+            </div>
+          </section>
+
+          <!-- Step 4: Done / Confirmation -->
+          <section id="step4" class="step-pane hidden">
+            <div class="confirmation-content">
+              <div class="check-circle">✓</div>
+              <h2 class="conf-title">Appointment Confirmed!</h2>
+              <p class="conf-subtitle">We look forward to seeing you at Varma Clinic.</p>
+
+              <div class="booking-receipt-card">
+                <div class="receipt-row">
+                  <span class="receipt-label">Booking Reference</span>
+                  <span id="confRef" class="receipt-val code-val"></span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">Doctor</span>
+                  <span id="confDoctor" class="receipt-val"></span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">Patient</span>
+                  <span id="confPatient" class="receipt-val"></span>
+                </div>
+                <div class="receipt-row">
+                  <span class="receipt-label">Status</span>
+                  <span class="status-badge-confirmed">Confirmed</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Footer Actions -->
+          <div class="form-actions">
+            <button id="btnCancel" type="button" class="btn-pill-cancel">Cancel</button>
+            <button id="btnNext" type="button" class="btn-pill-next">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Visual Stage with Medical Interior & Hotspot -->
+      <div class="visual-column">
+        <div class="visual-bg">
+          <!-- Hotspot Annotation Badge matching the design -->
+          <div class="hotspot-badge" style="bottom: 22%; right: 20%;">
+            <div class="hotspot-icon">i</div>
+            <span class="hotspot-text">Patient Seat</span>
+          </div>
+          
+          <div class="clinic-badge-top">
+            <span class="dot-online"></span> Certified Dental & Medical Suite
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- My Appointments Drawer (Accessible via Menu) -->
+  <div id="drawerOverlay" class="drawer-overlay hidden">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h3 class="drawer-title">My Appointments</h3>
+        <button id="btnCloseDrawer" class="btn-close-drawer">&times;</button>
+      </div>
+
+      <div class="drawer-body">
+        <p class="drawer-desc">Enter your email address to look up and manage your bookings.</p>
+        
+        <div class="lookup-input-bar">
+          <input type="email" id="drawerEmailInput" class="custom-input" placeholder="ada@example.com" />
+          <button id="btnRunLookup" class="btn-pill-next" style="padding: 10px 18px;">Find</button>
+        </div>
+
+        <div id="drawerAlert" class="alert-box hidden" style="margin-top: 14px;"></div>
+        <div id="drawerBookingsList" class="drawer-bookings-container">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div id="contactOverlay" class="drawer-overlay hidden">
+    <div class="modal-card-center">
+      <div class="drawer-header">
+        <h3 class="drawer-title">Contact Varma Clinic</h3>
+        <button id="btnCloseContact" class="btn-close-drawer">&times;</button>
+      </div>
+      <div style="padding: 24px;">
+        <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
+          Have questions or need urgent assistance? Reach our care team anytime.
+        </p>
+        <div style="font-size: 14px; display: flex; flex-direction: column; gap: 10px; color: #1e293b;">
+          <div>📍 <strong>Address:</strong> 14 Healthcare Boulevard, Victoria Island, Lagos</div>
+          <div>📞 <strong>Phone:</strong> +234 1 234 5678</div>
+          <div>✉ <strong>Email:</strong> care@varma-clinic.com</div>
+          <div>⏰ <strong>Hours:</strong> Mon – Sat: 8:00 AM – 6:00 PM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

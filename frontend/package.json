@@ -1,0 +1,8 @@
+{
+  "name": "varma-clinic-frontend",
+  "version": "1.0.0",
+  "description": "Varma Clinic Patient Portal Frontend",
+  "scripts": {
+    "build": "node build.js"
+  }
+}
