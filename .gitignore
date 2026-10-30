@@ -5,5 +5,4 @@ clinic.db*
 .DS_Store
 .vercel
 seed.js
-config.js
 frontend/config.js
