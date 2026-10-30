@@ -20,6 +20,20 @@ app.use(
 
 app.use(express.json());
 
+// Root welcome & status endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Koya Clinic Booking API is running",
+    status: "healthy",
+    endpoints: {
+      health: "/health",
+      slots: "GET /slots (requires X-API-Key)",
+      bookings: "GET, POST, DELETE /bookings (requires X-API-Key)",
+      reset: "POST /reset (requires X-API-Key)",
+    },
+  });
+});
+
 // Public health check and config endpoints
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "healthy", timestamp: new Date().toISOString() });
