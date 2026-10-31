@@ -8,7 +8,19 @@ const config = require("./config");
 
 const app = express();
 
-// Full CORS setup
+// Full CORS & Preflight setup (Express 5 compatible)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Idempotency-Key");
+  res.header("Access-Control-Expose-Headers", "Retry-After");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 app.use(
   cors({
     origin: "*",
